@@ -127,7 +127,7 @@ const logout = async(req,res)=>{
 
 //    ----------------------------------------Verfiy--Ticket--------------------------------------
      const verifyticket=async (req,res)=>{
-        const {source,destination,ticketId}=  req.body;
+        const {source,destination,ticketId,expAt}=  req.body;
         
         
         try{
@@ -135,6 +135,12 @@ const logout = async(req,res)=>{
           
           if(!verify){
               return res.status(401).json({message:"Not a Valid Ticket ID"})
+          }
+          const expire= new Date(verify.expAt);
+          const curr= new Date(expAt)
+
+          if(expire.getTime() < curr.getTime()){
+            return res.status(400).json({message:"Ticket Has Expired"})
           }
          const check = verify.routes.includes(source) && verify.routes.includes(destination)
          if(!check){

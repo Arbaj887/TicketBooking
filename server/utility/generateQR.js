@@ -8,6 +8,7 @@ const generateQR = async (value) => {
             destination: value?.destination,
             price: value?.price,
             routes: value?.routes,
+            expiredAt :value?.expAt,
             createdAt: value?.createdAt,
         });
 
@@ -17,6 +18,7 @@ const generateQR = async (value) => {
     } catch (err) {
         console.log(err);
         throw new Error('QR code generation failed');
+        
     }
 };
 

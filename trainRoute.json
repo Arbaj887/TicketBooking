@@ -1,15 +1,18 @@
 [
-    {
-    "name":"ghatopur",
-     "station":["andheri","sakinaka","kurla"]
-},{
-    "name":"andheri",
-     "station":["sakinaka","kurla","ghatopur"]
-},{
-    "name":"sakinaka",
-     "station":["kurla","ghatopur","andheri"]
-},{
-    "name":"kurla",
-     "station":["ghatopur","andheri","sakinaka"]
-}
+  {
+    "name": "ghatopur",
+    "station": ["andheri", "sakinaka", "kurla"]
+  },
+  {
+    "name": "andheri",
+    "station": ["sakinaka", "kurla", "ghatopur"]
+  },
+  {
+    "name": "sakinaka",
+    "station": ["kurla", "ghatopur", "andheri"]
+  },
+  {
+    "name": "kurla",
+    "station": ["ghatopur", "andheri", "sakinaka"]
+  }
 ]

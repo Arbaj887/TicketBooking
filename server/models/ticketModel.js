@@ -20,6 +20,11 @@ const ticketSchema = new mongodb.Schema(
         type:Array,
         trim:true
     },
+    expAt:{
+      type:Date,
+      default: ()=>new Date().getTime()+1*60*60*1000,
+      
+    },
     QR:{
       type:String,
     },

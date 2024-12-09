@@ -104,8 +104,8 @@ function BookTicket() {
   };
 
   return (
-    <div className=" min-h-screen bg-gray-100">
-      <div className="w-full flex justify-between ">
+    <div className=" min-h-screen bg-gray-100"> 
+      <div className=" flex justify-between "> 
         {/* -----------------------------Hamburger-------------------------------------------------- */}
 
         <div className="">

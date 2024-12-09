@@ -55,28 +55,26 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
     if (targetElement) {
       
       html2canvas(targetElement, {
-        // logging: true,
+        logging: true,
         useCORS: true
       }).then((canvas) => {
-        
-        const imgWidth = 150;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-         
         const imgData = canvas.toDataURL('img/png');
         
         const pdf = new jsPDF('p', 'mm', 'a4');
         
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'PNG', 0, 0);
         
         pdf.save('Ticket.pdf');
       });
     }
+    
   };
 
   return (
+    <div className="absolute w-full min-h-screen bg-gray-600 bg-opacity-50">
     <div 
-      className="absolute bg-white flex flex-col h-screen overflow-auto md:min-w-[30%] min-w-[90%] rounded-xl shadow-xl">
-      <div className="w-full border-b border-gray-500  ">
+      className=" bg-white flex flex-col  h-screen overflow-auto md:w-[30%] w-[90%] rounded-xl shadow-xl">
+      <div className=" border-b border-gray-500  ">
         <RxCross1
           className="float-end m-4 text-xl cursor-pointer hover:text-rose-500"
           onClick={() => setShowHam(!showHam)}
@@ -127,8 +125,8 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
             <h1 className="text-lg font-bold text-gray-600">
               Price:{" "}
               <span className="font-normal text-gray-500">₹{ticket.price}</span>
-              <span>
-                <img src={ticket.QR} alt="QR Code" className="size-32 " />
+              <span className="font-normal">
+                <img src={ticket.QR} alt="QR Code" className="size-32 mt-1 " />
               </span>
             </h1>
             {/* <a href={ticket.QR} download="Ticket QR" 
@@ -140,6 +138,7 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

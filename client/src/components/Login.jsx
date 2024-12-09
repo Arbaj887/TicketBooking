@@ -6,7 +6,7 @@ function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
-  //console.log("token",token)
+  
 
 
   useEffect(()=>{
@@ -55,7 +55,7 @@ function Login() {
       if (result.status === 200) {
         
         sessionStorage.setItem("token", result?.data?.token);
-        //createSession('token',result?.data?.token);
+        
         alert("loggin successful! You can now login.");
 
         navigate("/bookticket");

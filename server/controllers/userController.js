@@ -27,9 +27,16 @@ const login=async(req,res)=>{
                 },
                     process.env.JWT_SECRET
                 )
-                // res.cookie("token", token)
+                 res.cookie("token", token,{
+                    httpOnly: false, // try this
+                     sameSite: 'none',
+                     secure: false,
+                 })
               return res.status(200)
-            //   .cookie('token',token,{httpOnly:true,secure:true})
+            //   .cookie('token',token,{
+            //     httpOnly: false, // try this
+            //     // secure: isSecure,
+            //     })
               .json({message:"Logging",token});  
                 
 }
@@ -142,7 +149,7 @@ const logout = async(req,res)=>{
           if(expire.getTime() < curr.getTime()){
             return res.status(400).json({message:"Ticket Has Expired"})
           }
-         const check = verify.routes.includes(source) && verify.routes.includes(destination)
+         const check = verify.routes.includes(source) && verify.routes.includes(destination) 
          if(!check){
              return res.status(401).json({message:"Destination is Invalid"})
          }

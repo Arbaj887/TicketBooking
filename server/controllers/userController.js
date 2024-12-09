@@ -138,7 +138,7 @@ const logout = async(req,res)=>{
           }
           const expire= new Date(verify.expAt);
           const curr= new Date(expAt)
-
+          
           if(expire.getTime() < curr.getTime()){
             return res.status(400).json({message:"Ticket Has Expired"})
           }
@@ -153,11 +153,32 @@ const logout = async(req,res)=>{
         }
      }
 
+//----------------------------------------checking--UserToken------------------------------------------
+const checktoken=async(req,res)=>{
+    const userId=req.userId;
+   
+    
+    try{
+        const check = await user.findOne({_id:userId})
+        if(!check){
+            
+            return res.status(401).json({message:"Invalid Token"}) ;
+        }
+        
+      return res.status(200).json({message:"valid"}); 
+     }catch(err){
+         console.log("check auth",err);
+         return res.status(500).json({message:'Internal server error'});
+ 
+     }
+}     
+
 module.exports={
     login,
     register,
     logout,
     bookticket,
     ticketList,
-    verifyticket
+    verifyticket,
+    checktoken
 }

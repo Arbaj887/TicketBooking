@@ -1,18 +1,18 @@
 [
   {
-    "name": "ghatopur",
+    "name": "ghatkopar",
     "station": ["andheri", "sakinaka", "kurla"]
   },
   {
     "name": "andheri",
-    "station": ["sakinaka", "kurla", "ghatopur"]
+    "station": ["sakinaka", "kurla", "ghatkopar"]
   },
   {
     "name": "sakinaka",
-    "station": ["kurla", "ghatopur", "andheri"]
+    "station": ["kurla", "ghatkopar", "andheri"]
   },
   {
     "name": "kurla",
-    "station": ["ghatopur", "andheri", "sakinaka"]
+    "station": ["ghatkopar", "andheri", "sakinaka"]
   }
 ]

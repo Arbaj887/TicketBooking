@@ -19,12 +19,28 @@ function BookTicket() {
   useEffect(() => {
     const authUser = async () => {
       if (!token) {
-        navigate("/");
+       return navigate("/");
       }
-      // const auth = await axios.post()
+      try{
+        const result=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/checktoken`,{},{
+        
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+       )
+       //console.log(result)
+      
+      }catch(err){
+        sessionStorage.setItem("token","");
+        navigate("/")
+        //alert(err.response?.data?.message || "Unauthorized Access")
+      }
     };
+  
     authUser();
-  }, [token, navigate]);
+  }, [token]);
 
   const defineRoute = async (e) => {
     if (source === "") {

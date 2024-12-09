@@ -8,8 +8,8 @@ const generateQR = async (value) => {
             destination: value?.destination,
             price: value?.price,
             routes: value?.routes,
-            expiredAt :value?.expAt,
-            createdAt: value?.createdAt,
+            expiredAt :new Date(value?.expAt).toLocaleTimeString(),
+            createdAt:new Date( value?.createdAt).toLocaleDateString(),
         });
 
         

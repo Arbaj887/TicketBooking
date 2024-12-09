@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 
 function TicketList({ showHam, setShowHam, buyTicket }) {
@@ -43,6 +45,34 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
     return <h1 className="text-center text-red-500">Error: {error}</h1>;
   }
 
+  const convertToPDF = (e,i) => {
+    e.preventDefault()
+    
+    const targetElement = document.getElementById(i);
+    
+      targetElement.removeChild(targetElement.lastElementChild); //removing last element button download so it not display on ticket
+      //targetElement.removeChild(targetElement.lastElementChild);
+    if (targetElement) {
+      
+      html2canvas(targetElement, {
+        // logging: true,
+        useCORS: true
+      }).then((canvas) => {
+        
+        const imgWidth = 150;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+         
+        const imgData = canvas.toDataURL('img/png');
+        
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        
+        pdf.save('Ticket.pdf');
+      });
+    }
+  };
+
   return (
     <div 
       className="absolute bg-white flex flex-col h-screen overflow-auto md:min-w-[30%] min-w-[90%] rounded-xl shadow-xl">
@@ -56,9 +86,9 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
         <h1 className="text-2xl text-slate-600">Ticket Purchase</h1>
       </div>
       <div className="max-w-4xl mx-auto p-4">
-        {userTicket.map((ticket) => (
-          <div
-            key={ticket._id}
+        {userTicket.map((ticket,i) => (
+          <div id={i}
+            key={i}
             className="bg-white shadow-l5 rounded-lg p-6 mb-4 border-l-4 border-blue-500 transform transition-transform hover:scale-105"
           >
             <h1 className="text-lg font-bold text-gray-600">
@@ -101,10 +131,12 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
                 <img src={ticket.QR} alt="QR Code" className="size-32 " />
               </span>
             </h1>
-            <a href={ticket.QR} download="Ticket QR" 
+            {/* <a href={ticket.QR} download="Ticket QR" 
             className="text-green-500"
-            >Download</a>
-          
+            >Download</a> */}
+          <button className="bg-green-600 text-white py-2 px-4 my-4 rounded-lg shadow-lg"
+          onClick={(e)=>convertToPDF(e,i)}
+          >Download Ticket</button>
           </div>
         ))}
       </div>

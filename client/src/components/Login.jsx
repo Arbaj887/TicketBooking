@@ -1,10 +1,42 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { createSession, Link, useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+  //console.log("token",token)
+
+
+  useEffect(()=>{
+    const  checkauth=async()=>{ //----------if user is already login it will not allow to come on login page
+    if(token?.length>0){
+    try{
+      
+     const result= await axios.post(`${import.meta.env.VITE_BACKEND_URL}/checktoken`,{},{
+      
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+     )
+     //console.log(result)
+     if(result.status===200){
+     navigate('/bookticket')
+     }
+    
+    }catch(err){
+      console.log(err)
+      
+      navigate("/")
+      
+    }
+  }
+}
+    checkauth()
+  },[])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,7 +53,7 @@ function Login() {
         }
       );
       if (result.status === 200) {
-        console.log(result);
+        
         sessionStorage.setItem("token", result?.data?.token);
         //createSession('token',result?.data?.token);
         alert("loggin successful! You can now login.");

@@ -5,6 +5,7 @@ import route from "../../../trainRoute.json";
 import { FaArrowLeft } from "react-icons/fa";
 
 function VerifyTicket() {
+  document.title="Verfiy Ticket";
   const navigate = useNavigate();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");

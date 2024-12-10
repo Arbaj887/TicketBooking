@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register() {
+  document.title="Register";
   const [formData, setFormData] = useState({
     name: "",
     email: "",

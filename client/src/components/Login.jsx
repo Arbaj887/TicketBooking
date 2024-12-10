@@ -3,13 +3,16 @@ import axios from "axios";
 import {  Link, useNavigate } from "react-router-dom";
 
 function Login() {
+  document.title="Login";
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   
 
-
+  
   useEffect(()=>{
+   
+    
     const  checkauth=async()=>{ //----------if user is already login it will not allow to come on login page
     if(token?.length>0){
     try{

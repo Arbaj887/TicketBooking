@@ -1,7 +1,7 @@
 [
   {
     "name": "ghatkopar",
-    "station": ["andheri", "sakinaka", "kurla"]
+    "station": ["andheri", "sakinaka", "kurla","varsoa"]
   },
   {
     "name": "andheri",
@@ -14,5 +14,9 @@
   {
     "name": "kurla",
     "station": ["ghatkopar", "andheri", "sakinaka"]
+  },
+  {
+   "name":"varsoa",
+   "station":["ghatkopar","andheri","kurla"]
   }
 ]

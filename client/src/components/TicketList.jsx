@@ -51,7 +51,7 @@ function TicketList({ showHam, setShowHam, buyTicket }) {
     const targetElement = document.getElementById(i);
     
       targetElement.removeChild(targetElement.lastElementChild); //removing last element button download so it not display on ticket
-      //targetElement.removeChild(targetElement.lastElementChild);
+      
     if (targetElement) {
       
       html2canvas(targetElement, {

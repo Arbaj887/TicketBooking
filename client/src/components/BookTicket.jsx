@@ -7,42 +7,50 @@ import Logout from "./Logout";
 import TicketList from "./TicketList";
 
 function BookTicket() {
+  document.title = "Book Ticket";
   const navigate = useNavigate();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
+  const [destinationStation, setDestinationStation] = useState([]);
   const [price, setPrice] = useState(null);
   const [routes, setRoutes] = useState(null);
   const [showHam, setShowHam] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    const authUser = async () => {
+    const authUser  = async () => {
       if (!token) {
-       return navigate("/");
+        return navigate("/");
       }
-      try{
-        const result=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/checktoken`,{},{
-        
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-       )
-       //console.log(result)
-      
-      }catch(err){
-        sessionStorage.setItem("token","");
-        navigate("/")
-        //alert(err.response?.data?.message || "Unauthorized Access")
+      try {
+        await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/checktoken`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (err) {
+        sessionStorage.setItem("token", "");
+        navigate("/");
       }
     };
-  
-    authUser();
-  }, [token]);
 
-  const defineRoute = async (e) => {
+    authUser ();
+  }, [token, navigate]);
+//------------------------------------------------------------------------------------------------------------
+  const setDestinationOption = (e) => {
+    e.preventDefault();
+    const selectedSource = e.target.value; 
+    const filteredRoute = route.find((stat) => stat.name === selectedSource); 
+    setDestinationStation(filteredRoute ? filteredRoute.station : []); // Set the destination stations or an empty array
+  };
+//---------------------------------------------------------------------------------------------------------
+  const defineRoute = () => {
     if (source === "") {
       alert("Please Select the source Location");
       return;
@@ -57,9 +65,7 @@ function BookTicket() {
 
       if (from) {
         setRoutes(from.station.slice(0, from.station.indexOf(to) + 1));
-
         const index = from.station.indexOf(to) + 1;
-        //console.log(to, index)
         if (index !== -1) {
           const value = index * 5;
           setPrice(value);
@@ -69,9 +75,10 @@ function BookTicket() {
       }
     }
   };
-
+//------------------------------------------------------------------------------------------------------
   const buyTicket = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -90,24 +97,21 @@ function BookTicket() {
         }
       );
 
-      // Assuming the response is successfull
       alert(`Ticket purchased from ${source} to ${destination} for ₹${price}`);
-
-      // Resetting the form fields
       setSource("");
       setDestination("");
       setPrice(null);
-    } catch (error) {
+      setDestinationStation([]); } catch (error) {
       console.error("Error purchasing ticket:", error);
       alert("There was an error purchasing the ticket. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
-
+//--------------------------------------------------------------------------------------------------------
   return (
-    <div className=" min-h-screen bg-gray-100"> 
-      <div className=" flex justify-between "> 
-        {/* -----------------------------Hamburger-------------------------------------------------- */}
-
+    <div className="min-h-screen bg-gray-100">
+      <div className="flex justify-between">
         <div className="">
           {showHam ? (
             <TicketList
@@ -122,7 +126,6 @@ function BookTicket() {
             />
           )}
         </div>
-        {/* -----------------------verfiy--Ticket----------------------------------- */}
         <div className="flex flex-row justify-center items-center">
           <Link to="/verfiyticket">
             <button className="bg-green-500 py-2 px-4 m-4 text-white rounded-md shadow-lg">
@@ -132,7 +135,6 @@ function BookTicket() {
           <Logout />
         </div>
       </div>
-      {/* ---------------------------form----------------------------------------------------------- */}
       <div className="flex flex-col items-center justify-center">
         <div className="bg-white shadow-md rounded-lg p-6 w-96">
           <h1 className="text-2xl font-bold mb-4 text-center">Book Ticket</h1>
@@ -140,8 +142,9 @@ function BookTicket() {
             <h2 className="text-lg font-semibold mb-2">Source</h2>
             <select
               value={source}
-              onChange={async (e) => {
+              onChange={(e) => {
                 setSource(e.target.value);
+                setDestinationOption(e);
               }}
               className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500"
             >
@@ -163,11 +166,15 @@ function BookTicket() {
               className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-500"
             >
               <option value="">Select Destination</option>
-              {route.map((station, i) => (
-                <option key={i} value={station.name}>
-                  {station.name}
-                </option>
-              ))}
+              {destinationStation.length > 0 ? (
+                destinationStation.map((station, i) => (
+                  <option key={i} value={station}>
+                    {station}
+                  </option>
+                ))
+              ) : (
+                ""
+              )}
             </select>
           </div>
           {price !== null && (
@@ -179,9 +186,7 @@ function BookTicket() {
           <div>
             <button
               onClick={defineRoute}
-              className={
-                "my-2 w-full p-2 rounded-md text-white  bg-green-500 hover:bg-green-600  cursor-pointer"
-              }
+              className="my-2 w-full p-2 rounded-md text-white bg-green-500 hover:bg-green-600 cursor-pointer"
             >
               Get Price
             </button>
@@ -189,14 +194,16 @@ function BookTicket() {
           <div>
             <button
               onClick={buyTicket}
-              disabled={price === null}
+              disabled={loading || price === null}
               className={`my-2 w-full p-2 rounded-md text-white ${
-                price !== null
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : price !== null
                   ? "bg-blue-500 hover:bg-blue-600"
                   : "bg-gray-400 cursor-not-allowed"
               }`}
             >
-              Buy Ticket
+              {loading ? "Processing..." : "Buy Ticket"}
             </button>
           </div>
         </div>
